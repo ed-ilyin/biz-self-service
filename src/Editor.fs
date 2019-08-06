@@ -18,7 +18,8 @@ type Model = {
     msg: TypeDesc
 }
 
-type Msg = ChangeModel of TypeDesc
+type Msg =
+    | Change of TypeDesc list
 
 let init () = {
     types = Map.empty
@@ -31,9 +32,20 @@ let init () = {
     msg = Nothing
 }
 
+let rec add update state = state
+
+let rec change path state =
+    match path, state with
+    | [], _ | Nothing :: _, _ -> Nothing
+    | ListOf _ :: tail, ListOf j -> change tail j |> ListOf
+    | ListOf t :: tail, _ -> change tail t |> ListOf
+    | other :: _, _ -> other
+
+let rec remove item state = state
+
 let update msg model =
     match msg with
-    | ChangeModel typeDesc -> { model with model = typeDesc }
+    | Change path -> { model with model = change (List.rev path) model.model }
 
 // VIEW
 let typeDescToString = function
@@ -61,12 +73,14 @@ let listEditor list =
     |> List.map (fun (k,v) -> div [] [ str k ])
     |> div []
 
-let rec typeDesc model dispatch =
+let rec typeDesc model path dispatch =
     let dropdown =
         select [
             Value (typeDescToString model)
             OnChange (fun ev ->
-                stringToTypeDesc !!ev.target?value |> ChangeModel |> dispatch
+                stringToTypeDesc !!ev.target?value :: path
+                    |> Change
+                    |> dispatch
                 )
         ] [ opt "Nothing"
             opt "One of"
@@ -79,7 +93,8 @@ let rec typeDesc model dispatch =
     let content =
         match model with
             | OneOf list | AllOf list -> listEditor list
-            | ListOf kind -> typeDesc kind dispatch
+            | ListOf kind ->
+                typeDesc kind (ListOf Nothing :: path) dispatch
             | _ -> nothing
     div [] [ dropdown; content ]
 
@@ -87,5 +102,5 @@ let view model dispatch =
     div [] [
         h1 [] [ str "Actor AKA Mailbox Processor AKA State Machine" ]
         h2 [] [ str "Model AKA State Type" ]
-        typeDesc model.model dispatch
+        typeDesc model.model [] dispatch
     ]
