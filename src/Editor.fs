@@ -18,8 +18,9 @@ type Model = {
     msg: TypeDesc
 }
 
-type Msg =
-    | Change of TypeDesc list
+type PathStep = Skip | Key of string | Value of TypeDesc
+
+type Msg = Change of PathStep list
 
 let init () = {
     types = Map.empty
@@ -36,16 +37,24 @@ let rec add update state = state
 
 let rec change path state =
     match path, state with
-    | [], _ | Nothing :: _, _ -> Nothing
-    | ListOf _ :: tail, ListOf j -> change tail j |> ListOf
-    | ListOf t :: tail, _ -> change tail t |> ListOf
-    | other :: _, _ -> other
+    | None :: tail, ListOf t -> change tail value t |> ListOf
+    | Some key :: tail, OneOf list ->
+        match Map.tryFind key list with
+        | None -> value
+        | Some t -> Map.add key (change tail value t) list |> OneOf
+    | Some key :: tail, AllOf list ->
+        match Map.tryFind key list with
+        | None -> value
+        | Some t -> Map.add key (change tail value t) list |> AllOf
+    | _ -> value
 
 let rec remove item state = state
 
 let update msg model =
     match msg with
-    | Change path -> { model with model = change (List.rev path) model.model }
+    | Change path ->
+        { model with
+              model = change (List.rev path) value model.model }
 
 // VIEW
 let typeDescToString = function
@@ -68,18 +77,37 @@ let stringToTypeDesc = function
 
 let opt name = option [] [ str name ]
 
-let listEditor list =
-    Map.toList list
-    |> List.map (fun (k,v) -> div [] [ str k ])
-    |> div []
+let wrap = div [ Class "wrap" ]
+let row = tr [ Class "row" ]
+let cell = td [ Class "cell" ]
+
+let inputKey value dispatch =
+    input [ Value value; OnChange (fun ev -> dispatch !!ev.target?value)]
 
 let rec typeDesc model path dispatch =
+    let listEditor list =
+        let body =
+            Map.toList list |> List.map (fun (k,v) ->
+                row [
+                    cell [inputKey k (ChangeKey >> dispatch)]
+                    cell [typeDesc v (Some k::path) dispatch ]
+                ]
+            ) |> tbody []
+        table[Class "table"][
+            body
+            tfoot[][
+                row [
+                    cell [input []]
+                    cell [typeDesc Nothing path dispatch ]
+                ]
+            ]
+        ]
     let dropdown =
         select [
+            Class "menulist"
             Value (typeDescToString model)
             OnChange (fun ev ->
-                stringToTypeDesc !!ev.target?value :: path
-                    |> Change
+                ChangeValue (path, stringToTypeDesc !!ev.target?value)
                     |> dispatch
                 )
         ] [ opt "Nothing"
@@ -90,13 +118,11 @@ let rec typeDesc model path dispatch =
             opt "Number"
             opt "String"
         ]
-    let content =
-        match model with
-            | OneOf list | AllOf list -> listEditor list
-            | ListOf kind ->
-                typeDesc kind (ListOf Nothing :: path) dispatch
-            | _ -> nothing
-    div [] [ dropdown; content ]
+    match model with
+        | OneOf list | AllOf list -> wrap [ dropdown; listEditor list ]
+        | ListOf kind ->
+            wrap [ dropdown; typeDesc kind (None :: path) dispatch ]
+        | _ -> dropdown
 
 let view model dispatch =
     div [] [
