@@ -1,4 +1,4 @@
-module App.View
+module View
 
 open Elmish
 open Fable.React
@@ -6,17 +6,19 @@ open Fable.React.Props
 open Fulma
 open Fable.FontAwesome
 
-type Model = { editor: Editor.Model }
+type Model = { myLists: MyLists.Model }
 
-type Msg = Editor of Editor.Msg
+type Msg = MyLists of MyLists.Msg
 
-let init _ = { editor = Editor.init () }, Cmd.none
+let init _ = { myLists = MyLists.init () }, Cmd.none
 
 let private update msg model =
-    match msg with
-    | Editor msg -> { model with editor = Editor.update msg model.editor }, Cmd.none
+    // match msg with
+    // | Editor msg -> { model with editor = Editor.update msg model.editor }, Cmd.none
+    model, Cmd.none
 
-let private view model dispatch = Editor.view model.editor (Editor >> dispatch)
+let private view model dispatch =
+    MyLists.view model.myLists (MyLists >> dispatch)
 
 open Elmish.Debug
 open Elmish.HMR
