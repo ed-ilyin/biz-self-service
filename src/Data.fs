@@ -50,18 +50,35 @@ let addNewV2V vs e label name properties events =
     List.fold (fun es v1 -> addE v1 e v2 es) (AddV v2 :: events) vs
 
 let me = newV "👨🏽‍💼" "Ed Ilyin" []
-let lists = newV "📋" "Lists" []
-let tasks = newV "📋" "Tasks" []
-let projects = newV "📋" "Projects" []
-let pGerman = newV "🥅" "Говорю по немецки" []
+let lists = newV "list" "Lists" []
+let tasks = newV "list" "Tasks" []
+let activeProjects = newV "list" "Active Projects" []
+let areas = newV "list" "Areas" []
+let wishes = newV "list" "Wishes" []
+let pGerman = newV "goal" "Говорю по немецки" []
+let pGTD = newV "goal" "Я всегда знаю чем лучше заняться" []
+let wGerman = newV "wish" "Я разговариваю с немцами по немецки" []
+let wDreams = newV "wish" "Я осуществил свои мечты" []
+let daily = newV "list" "Daily" []
 let events =
     []
     |> addV me
     |> addV2V me "🔘" lists
+    |> addV2V lists "🔘" activeProjects
     |> addV2V lists "🔘" tasks
-    |> addV2V lists "🔘" projects
-    |> addV2V projects "🔘" pGerman
-    |> addNewV2V [tasks;pGerman] "🔘" "☑️" "Пройди один урок немецкого в Duolingo" []
+    |> addV2V lists "🔘" daily
+    |> addV2V lists "🔘" areas
+    |> addV2V lists "🔘" wishes
+    |> addV2V activeProjects "🔘" pGerman
+    |> addV2V activeProjects "🔘" pGTD
+    |> addV2V wDreams "🔘" pGTD
+    |> addV2V wishes "🔘" wGerman
+    |> addV2V wishes "🔘" wDreams
+    |> addV2V wGerman "🔘" pGerman
+    |> addNewV2V [pGerman;daily] "🔘" "task" "Открой следующий урок немецкого в Duolingo и пройди его" []
+    |> addNewV2V [pGTD;daily] "🔘" "task" "Прочти первую запись в списке Входящие и разбери её" []
+    |> addNewV2V [pGTD;daily] "🔘" "task" "Прочти первое письмо и разбери его" []
+    |> addNewV2V [areas] "🔘" "area" "ALSO" []
 
 let eventsFolder event (vertexes,edges) =
     match event with

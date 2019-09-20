@@ -8,15 +8,12 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts/";
 .wrap {
     display: flex;
     flex-wrap: wrap;
-    align-items: baseline;
+    align-items: center;
 }
 
-.wrap-border {
-    display: flex;
-    flex-wrap: wrap;
+.card {
     border: 1px solid #345678;
-    align-items: baseline;
-    border-radius: 8px;
+    border-radius: 32px;
     background-color: #234567;
     margin: 4px;
     box-shadow: 4px 4px #012345;
@@ -40,16 +37,29 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts/";
     padding: 4px;
 }
 
+.small {
+    margin: 4px;
+    font-size: x-small;
+    color: #56789a;
+}
+
+.xx-small {
+    margin: 4px;
+    font-size: xx-small;
+    color: #56789a;
+}
+
 .text {
     margin: 4px;
 }
 
 .parent {
+    display: flex;
+    align-items: center;
     margin: 4px;
     border: 1px solid #456789;
     background-color: #345678;
-    border-radius: 8px;
-    padding: 4px;
-    color: #6789ab;
-    font-size: small;
+    border-radius: 16px;
+    color: #7890ab;
+    font-size: x-small;
 }
