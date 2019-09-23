@@ -5,6 +5,20 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts/";
 @import "~@fortawesome/fontawesome-free/scss/brands.scss";
 
 //@import '~bulma/bulma.sass';
+html {
+    padding-top: env(safe-area-inset-top);
+    padding-left: env(safe-area-inset-left);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-right: env(safe-area-inset-right);
+    background: linear-gradient(#0009,#0009), url(https://images.unsplash.com/photo-1554353480-322ccb84e8b8?ixlib=rb-1.2.1&q=99&fm=jpg&crop=entropy&cs=tinysrgb&w=2048&fit=max&ixid=eyJhcHBfaWQiOjcwOTV9);
+    background-size: cover;
+    top: 0px;
+    bottom: 0px;
+    position: absolute;
+    color: #fffd;
+    font-family:sans-serif;
+}
+
 .wrap {
     display: flex;
     flex-wrap: wrap;
@@ -12,12 +26,15 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts/";
 }
 
 .card {
-    border: 1px solid #345678;
-    border-radius: 32px;
-    background-color: #234567;
+    // border: 1px solid #abcdef23;
+    border-radius: 16px;
+    background-color: #8888;
     margin: 4px;
-    box-shadow: 4px 4px #012345;
-    padding: 8px;
+    box-shadow: 4px 4px #0003;
+    padding: 4px;
+    color: #fffd;
+    font-size: medium;
+    text-align: left;
 }
 
 .menulist {
@@ -40,13 +57,13 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts/";
 .small {
     margin: 4px;
     font-size: x-small;
-    color: #56789a;
+    color: #fff3;
 }
 
 .xx-small {
     margin: 4px;
     font-size: xx-small;
-    color: #56789a;
+    color: #fff3;
 }
 
 .text {
@@ -55,11 +72,31 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts/";
 
 .parent {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     margin: 4px;
-    border: 1px solid #456789;
-    background-color: #345678;
+    // border: 1px solid #456789;
+    background-color: #0002;
     border-radius: 16px;
-    color: #7890ab;
+    color: #fff6;
     font-size: x-small;
+}
+
+.footer {
+    position: fixed;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    background-color: #8888;
+    text-align: center;
+    padding-left: env(safe-area-inset-left);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-right: env(safe-area-inset-right);
+    overflow-x: auto;
+}
+
+.strip {
+    display: flex;
+    min-width: max-content;
+    justify-content: space-between;
+    padding: 4px 8px 8px 4px;
 }

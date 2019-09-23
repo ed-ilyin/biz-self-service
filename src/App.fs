@@ -13,9 +13,10 @@ type Msg = MyLists of MyLists.Msg
 let init _ = { myLists = MyLists.init () }, Cmd.none
 
 let private update msg model =
-    // match msg with
-    // | Editor msg -> { model with editor = Editor.update msg model.editor }, Cmd.none
-    model, Cmd.none
+    match msg with
+    | MyLists msg ->
+        { model with myLists = MyLists.update msg model.myLists },
+            Cmd.none
 
 let private view model dispatch =
     MyLists.view model.myLists (MyLists >> dispatch)

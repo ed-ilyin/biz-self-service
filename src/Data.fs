@@ -53,6 +53,7 @@ let me = newV "👨🏽‍💼" "Ed Ilyin" []
 let lists = newV "list" "Lists" []
 let tasks = newV "list" "Tasks" []
 let activeProjects = newV "list" "Active Projects" []
+let somedayMaybe = newV "list" "Someday / Maybe" []
 let areas = newV "list" "Areas" []
 let wishes = newV "list" "Wishes" []
 let pGerman = newV "goal" "Говорю по немецки" []
@@ -65,6 +66,7 @@ let events =
     |> addV me
     |> addV2V me "🔘" lists
     |> addV2V lists "🔘" activeProjects
+    |> addV2V lists "🔘" somedayMaybe
     |> addV2V lists "🔘" tasks
     |> addV2V lists "🔘" daily
     |> addV2V lists "🔘" areas
@@ -79,6 +81,11 @@ let events =
     |> addNewV2V [pGTD;daily] "🔘" "task" "Прочти первую запись в списке Входящие и разбери её" []
     |> addNewV2V [pGTD;daily] "🔘" "task" "Прочти первое письмо и разбери его" []
     |> addNewV2V [areas] "🔘" "area" "ALSO" []
+    |> addNewV2V [tasks] "🔘" "task" "Remind MathiasBo and MichaelPe to answer on your questions" []
+    // |> addNewV2V [events] "🔘" "event" "Remind MathiasBo and MichaelPe to answer on your questions" []
+//     System availability
+// Scheduled: 23 Sep 2019 at 09:50 to 10:00
+// Location: Res DE SO Conf - 1. OG HG BR1; Microsoft Teams +4969365057514,,67580966# 
 
 let eventsFolder event (vertexes,edges) =
     match event with
