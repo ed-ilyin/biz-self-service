@@ -1,4 +1,4 @@
-module View
+module App.View
 
 open Elmish
 open Fable.React

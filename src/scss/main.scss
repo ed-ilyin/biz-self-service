@@ -54,7 +54,7 @@ html {
     padding: 4px;
 }
 
-.small {
+.x-small {
     margin: 4px;
     font-size: x-small;
     color: #fff3;
@@ -75,7 +75,7 @@ html {
     align-items: baseline;
     margin: 4px;
     // border: 1px solid #456789;
-    background-color: #0002;
+    background-color: #0005;
     border-radius: 16px;
     color: #fff6;
     font-size: x-small;
@@ -99,4 +99,15 @@ html {
     min-width: max-content;
     justify-content: space-between;
     padding: 4px 8px 8px 4px;
+}
+
+.space {
+    height: 54px;
+}
+
+.property {
+    display: flex;
+    color: #fff7;
+    font-size: x-small;
+    align-items: baseline;
 }
